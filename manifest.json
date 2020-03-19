@@ -9,7 +9,9 @@
     "32": "icons/vriska-32.png"
   },
   "permissions": [
-      "storage"
+      "storage",
+      "*://*.tumblr.com/*",
+      "tabs"
   ],
   "background": {
     "scripts": [

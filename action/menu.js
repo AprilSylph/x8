@@ -4,7 +4,18 @@ const installedScripts = [
 ];
 
 const scriptsList = document.querySelector('#scripts ul');
-const writeEnabled = () => {
+const writeEnabled = function() {
+  browser.tabs.query({url: '*://*.tumblr.com/*'}).then(tabs => {
+    const action = this.checked ? 'run' : 'destroy';
+    const scriptName = this.id;
+
+    tabs.forEach(({id}) => {
+      browser.tabs.executeScript(id, {
+        code: `window.postMessage({xkitEvent: '${action}:${scriptName}'}, '*')`,
+      })
+    });
+  });
+
   const enabledScripts = installedScripts.map(
     script => document.getElementById(script.name).checked ? script.name : undefined,
   ).filter(x => x !== undefined);

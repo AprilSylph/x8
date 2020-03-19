@@ -1,4 +1,5 @@
 import {classList, element, indexBy, reactFiber, reactLoaded} from '/src/util.js';
+import {customEvents} from '/src/messageListener.js';
 import postListener from '/src/postListener.js';
 import webcrack3 from '/src/webcrack3.js';
 
@@ -83,3 +84,12 @@ document.head.append(element('style', style => {
 
 const reblog_timestamps = () => document.querySelectorAll('article').forEach(addTimestampsToPost);
 reactLoaded.then(() => postListener.addCallback(reblog_timestamps));
+
+customEvents['run:reblog_timestamps'] = () => postListener.addCallback(reblog_timestamps);
+customEvents['destroy:reblog_timestamps'] = () => {
+  postListener.removeCallback(reblog_timestamps);
+
+  for (const timestamp of document.body.querySelectorAll('.xkit-post-timestamp, .xkit-reblog-timestamp')) {
+    timestamp.parentNode.removeChild(timestamp);
+  }
+};
